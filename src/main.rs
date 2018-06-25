@@ -1,10 +1,19 @@
+use std::fs::*;
+
 fn main() {
-    println!("Enter directory of frontend:");
+    let paths = read_dir("./").unwrap().map(|entry| {
+        entry.unwrap().path()
+    });
 
-    let mut frontend = String::new();
+    for pathbuf in paths {
+        let path: &str = pathbuf.to_str().unwrap();
 
-    std::io::stdin().read_line(&mut frontend)
-                .expect("Failed");
+        if path.starts_with("./test.txt") {
+            styles_refactor(path);
+        }
+    }
+}
 
-    println!("{:?}", frontend);
+fn styles_refactor(path: &str) {
+
 }
