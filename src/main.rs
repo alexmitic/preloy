@@ -1,3 +1,4 @@
+use std::io::Read;
 use std::fs::*;
 
 fn main() {
@@ -15,5 +16,8 @@ fn main() {
 }
 
 fn styles_refactor(path: &str) {
-
+    let mut file = File::open(path).expect("Unable to open the file");
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).expect("Unable to read the file");
+    
 }
