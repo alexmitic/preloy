@@ -9,17 +9,18 @@ fn main() {
     for pathbuf in paths {
         let path: &str = pathbuf.to_str().unwrap();
 
-        if path.starts_with("./test.txt") {
+        if path.starts_with("./test.") {
             root_refactor(path);
         }
     }
 }
 
 fn root_refactor(path: &str) {
-    let mut file = File::open("./test.txt").expect("Unable to open the file");
+    let mut file = File::open(path).expect("Unable to open the file");
     let mut contents = String::new();
     file.read_to_string(&mut contents).expect("Unable to read the file");
     
     contents = contents.replace("js/styles", "css/styles");
-    println!("{:?}", contents);
+
+    write(path, contents).expect("Unable to write file");
 }
