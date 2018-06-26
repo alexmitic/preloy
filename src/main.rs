@@ -1,7 +1,14 @@
 use std::io::Read;
+use std::env;
 use std::fs::*;
 
 fn main() {
+    let mut home = match env::home_dir() {
+        Some(path) => path.to_str().unwrap().to_owned(),
+        None => "".to_string(),
+    };
+    home.push_str("/target/");
+
     let paths = read_dir("./").unwrap().map(|entry| {
         entry.unwrap().path()
     });
@@ -11,6 +18,10 @@ fn main() {
 
         if path.starts_with("./test.") {
             root_refactor(path);
+
+            let target = home.as_str().to_owned() + &path.replacen("./", "", 1);
+
+            copy(path, target).expect("Unable move file");
         }
     }
 }
