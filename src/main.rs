@@ -13,30 +13,39 @@ fn main() {
         Some(path) => path.to_str().unwrap().to_owned(),
         None => "".to_string(),
     };
-    home.push_str("/target/");
+
+    let mut target = home.to_owned();
+    target.push_str("/Coda/CodaEasy-Backend/src/main/resources/static/");
+
+    home.push_str("/Coda/CodaEasy-Frontend/dist/");
 
     // Populate vector with files/folders and their destinations
     let mut destinations: Vec<Dest> = Vec::new();
     populate(&mut destinations);
 
+    move_folder(home, target, &destinations);
+}
 
-    // Get pathbufs for all files/folders in current directory
-    let paths = read_dir("./").unwrap().map(|entry| {
+fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
+    //Get pathbufs for all files/folders in frontend directory
+    let paths = read_dir(home.as_str().to_owned()).unwrap().map(|entry| {
         entry.unwrap().path()
     });
 
     for pathbuf in paths {
-        let path: &str = pathbuf.to_str().unwrap();
+        let path = pathbuf.file_name().unwrap().to_str().unwrap();
 
         match find_target(path, &destinations) {
             Some(dest) => {
-                if path.starts_with("./test.") {
-                    root_refactor(path);
+                if path.starts_with("root.html") {
+                    root_refactor(&(home.as_str().to_owned() + "root.html"));
                 }
 
-                let target = home.as_str().to_owned() + dest.as_str() + &path.replacen("./", "", 1);
+                let from = pathbuf.to_str().unwrap();
+                let to = target.as_str().to_owned() + dest.as_str() + &path;
 
-                copy(path, target).expect("Unable move file");
+                copy(from, to)
+                    .expect("Unable to move file");
             },
 
             None => println!("Not used {:?}", path),
@@ -55,7 +64,18 @@ fn root_refactor(path: &str) {
 }
 
 fn populate(destinations: &mut Vec<Dest>) {
-    destinations.push(Dest {name: "./test.".to_string(), target: "".to_string()});   
+    // HTML
+    destinations.push(Dest {name: "root.html".to_string(), target: "".to_string()});   
+
+    // JS
+    destinations.push(Dest {name: "scripts".to_string(), target: "js/".to_string()});   
+    destinations.push(Dest {name: "main".to_string(), target: "js/".to_string()});   
+    destinations.push(Dest {name: "inline".to_string(), target: "js/".to_string()});   
+    destinations.push(Dest {name: "polyfills".to_string(), target: "js/".to_string()});   
+
+    // CSS
+    destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "css/".to_string()});       
+    destinations.push(Dest {name: "styles".to_string(), target: "css/".to_string()});       
 }
 
 fn find_target(target: &str, destinations: &Vec<Dest>) -> Option<String> {
