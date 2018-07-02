@@ -35,21 +35,31 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
     for pathbuf in paths {
         let path = pathbuf.file_name().unwrap().to_str().unwrap();
 
-        match find_target(path, &destinations) {
-            Some(dest) => {
-                if path.starts_with("root.html") {
-                    root_refactor(&(home.as_str().to_owned() + "root.html"));
-                }
+        if path != "assets" && path != "partners" && path != "compiler-output"  {
+            match find_target(path, &destinations) {
+                Some(dest) => {
+                    if path.starts_with("root.html") {
+                        root_refactor(&(home.as_str().to_owned() + "root.html"));
+                    }
 
-                let from = pathbuf.to_str().unwrap();
-                let to = target.as_str().to_owned() + dest.as_str() + &path;
+                    let from = pathbuf.to_str().unwrap();
+                    let to = target.as_str().to_owned() + dest.as_str() + &path;
 
-                copy(from, to)
-                    .expect("Unable to move file");
-            },
+                    copy(from, to)
+                        .expect("Unable to move file");
+                },
 
-            None => println!("Not used {:?}", path),
-        }
+                None => println!("Not used {:?}", path),
+            }
+        } else {
+            let mut assets = home.clone();
+            assets.push_str((path.to_owned() + "/").as_str());
+
+            let mut assets_target = target.clone();
+            assets_target.push_str((path.to_owned() + "/").as_str());
+
+            move_folder(assets, assets_target, &destinations);
+        }   
     }
 }
 
@@ -76,6 +86,43 @@ fn populate(destinations: &mut Vec<Dest>) {
     // CSS
     destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "css/".to_string()});       
     destinations.push(Dest {name: "styles".to_string(), target: "css/".to_string()});       
+
+    // Assets
+    destinations.push(Dest {name: "about_platform_background".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "background".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "botkyrka_workshop".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "coda-easy-about-us-bg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "coda-easy-graph".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "codaeasy-computer".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "codaeasy-logo".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "code_tree_icon".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "cookie-icon".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "education-bg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "first-time-showcase".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "grading_icon".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "guldraven".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "lager".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "left_box".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "logo".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "no_avatar".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "own_material_icon".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "right_box".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "strings".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "study".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "vc-logo".to_string(), target: "".to_string()});
+
+    // Compiler-output
+    destinations.push(Dest {name: "index_out_of_bounds".to_string(), target: "".to_string()});
+
+    // Partners
+    destinations.push(Dest {name: "arboga".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "atvexa".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "botkyrka".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "kth".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "metapontum".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "montessori-norrtalje".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "ssis".to_string(), target: "".to_string()});
+
 }
 
 fn find_target(target: &str, destinations: &Vec<Dest>) -> Option<String> {
