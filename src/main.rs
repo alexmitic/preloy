@@ -58,6 +58,8 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
             let mut assets_target = target.clone();
             assets_target.push_str((path.to_owned() + "/").as_str());
 
+            let _result = create_dir(assets_target.as_str().to_owned());
+
             move_folder(assets, assets_target, &destinations);
         }   
     }
