@@ -84,9 +84,10 @@ fn populate(destinations: &mut Vec<Dest>) {
     destinations.push(Dest {name: "main".to_string(), target: "js/".to_string()});   
     destinations.push(Dest {name: "inline".to_string(), target: "js/".to_string()});   
     destinations.push(Dest {name: "polyfills".to_string(), target: "js/".to_string()});   
+    destinations.push(Dest {name: "vendor".to_string(), target: "js/".to_string()});   
 
     // CSS
-    destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "css/".to_string()});       
+    destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "js/".to_string()});       
     destinations.push(Dest {name: "styles".to_string(), target: "css/".to_string()});       
 
     // Assets
