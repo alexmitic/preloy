@@ -57,7 +57,7 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
                         .expect("Unable to move file");
                 },
 
-                None => println!("Not used {:?}", path),
+                None => println!("Not transfered {:?}", path),
             }
         } else {
             let mut assets = home.clone();
@@ -173,6 +173,8 @@ fn clear_target(target: &String, destinations: &Vec<Dest>) -> io::Result<()> {
             if should_delete(path, &destinations) {
                 fs::remove_file(pathbuf.to_str().unwrap())?;
             }
+        } else {
+            println!("Not deleted {:?}", path);
         }
     }
 
