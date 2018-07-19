@@ -1,6 +1,7 @@
-use std::io::Read;
+use std::io;
 use std::env;
-use std::fs::*;
+use std::fs;
+use std::io::Read;
 
 struct Dest {
     name: String,
@@ -17,18 +18,25 @@ fn main() {
     let mut target = home.to_owned();
     target.push_str("/Coda/CodaEasy-Backend/src/main/resources/static/");
 
+    // let mut target_clone = target.clone();
+
     home.push_str("/Coda/CodaEasy-Frontend/dist/");
 
     // Populate vector with files/folders and their destinations
     let mut destinations: Vec<Dest> = Vec::new();
     populate(&mut destinations);
+    
+    clear_target(&target, &destinations).expect("Could not clear target folder");;
+
+    fs::create_dir(target.as_str().to_owned() + "/js").expect("Could not create folder");
+    fs::create_dir(target.as_str().to_owned() + "/css").expect("Could not create folder");
 
     move_folder(home, target, &destinations);
 }
 
 fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
     //Get pathbufs for all files/folders in frontend directory
-    let paths = read_dir(home.as_str().to_owned()).unwrap().map(|entry| {
+    let paths = fs::read_dir(home.as_str().to_owned()).unwrap().map(|entry| {
         entry.unwrap().path()
     });
 
@@ -45,7 +53,7 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
                     let from = pathbuf.to_str().unwrap();
                     let to = target.as_str().to_owned() + dest.as_str() + &path;
 
-                    copy(from, to)
+                    fs::copy(from, to)
                         .expect("Unable to move file");
                 },
 
@@ -58,7 +66,7 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
             let mut assets_target = target.clone();
             assets_target.push_str((path.to_owned() + "/").as_str());
 
-            let _result = create_dir(assets_target.as_str().to_owned());
+            let _result = fs::create_dir(assets_target.as_str().to_owned());
 
             move_folder(assets, assets_target, &destinations);
         }   
@@ -66,13 +74,13 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
 }
 
 fn root_refactor(path: &str) {
-    let mut file = File::open(path).expect("Unable to open the file");
+    let mut file = fs::File::open(path).expect("Unable to open the file");
     let mut contents = String::new();
     file.read_to_string(&mut contents).expect("Unable to read the file");
     
     contents = contents.replace("js/styles", "css/styles");
 
-    write(path, contents).expect("Unable to write file");
+    fs::write(path, contents).expect("Unable to write file");
 }
 
 fn populate(destinations: &mut Vec<Dest>) {
@@ -136,4 +144,37 @@ fn find_target(target: &str, destinations: &Vec<Dest>) -> Option<String> {
     }
 
     return None
+}
+
+fn should_delete(target: &str, destinations: &Vec<Dest>) -> bool {
+    for dest in destinations {
+        if target.starts_with(dest.name.as_str()) {
+            return true
+        }
+    }
+
+    return false
+}
+
+fn clear_target(target: &String, destinations: &Vec<Dest>) -> io::Result<()> {
+    //Get pathbufs for all files/folders in frontend directory
+    let paths = fs::read_dir(target.as_str().to_owned()).unwrap().map(|entry| {
+        entry.unwrap().path()
+    });
+
+    for pathbuf in paths {
+        let path = pathbuf.file_name().unwrap().to_str().unwrap();
+
+        if path == "js" || path == "css" || path == "assets" {
+
+            fs::remove_dir_all(pathbuf.to_str().unwrap())?;
+        } else if path != "images" {
+
+            if should_delete(path, &destinations) {
+                fs::remove_file(pathbuf.to_str().unwrap())?;
+            }
+        }
+    }
+
+    Ok(())
 }
