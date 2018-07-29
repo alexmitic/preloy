@@ -96,6 +96,9 @@ fn populate(destinations: &mut Vec<Dest>) {
 
     // CSS
     destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "js/".to_string()});       
+    destinations.push(Dest {name: "fa-brands-400".to_string(), target: "js/".to_string()});       
+    destinations.push(Dest {name: "fa-regular-400".to_string(), target: "js/".to_string()});       
+    destinations.push(Dest {name: "fa-solid-900".to_string(), target: "js/".to_string()});       
     destinations.push(Dest {name: "styles".to_string(), target: "css/".to_string()});       
 
     // Assets
