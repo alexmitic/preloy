@@ -43,7 +43,7 @@ fn move_folder(home: String, target: String, destinations: &Vec<Dest>) {
     for pathbuf in paths {
         let path = pathbuf.file_name().unwrap().to_str().unwrap();
 
-        if path != "assets" && path != "partners" && path != "compiler-output"  {
+        if path != "assets" && path != "partners" && path != "compiler-output" && path != "avatars"  {
             match find_target(path, &destinations) {
                 Some(dest) => {
                     if path.starts_with("root.html") {
@@ -96,21 +96,25 @@ fn populate(destinations: &mut Vec<Dest>) {
 
     // CSS
     destinations.push(Dest {name: "fontawesome-webfont".to_string(), target: "js/".to_string()});       
-    destinations.push(Dest {name: "fa-brands-400".to_string(), target: "js/".to_string()});       
-    destinations.push(Dest {name: "fa-regular-400".to_string(), target: "js/".to_string()});       
-    destinations.push(Dest {name: "fa-solid-900".to_string(), target: "js/".to_string()});       
+    destinations.push(Dest {name: "fa-brands-400".to_string(), target: "css/".to_string()});       
+    destinations.push(Dest {name: "fa-regular-400".to_string(), target: "css/".to_string()});       
+    destinations.push(Dest {name: "fa-solid-900".to_string(), target: "css/".to_string()});       
     destinations.push(Dest {name: "styles".to_string(), target: "css/".to_string()});       
 
     // Assets
+    destinations.push(Dest {name: "about_platform_background.b7637a780117b2d5a091".to_string(), target: "js/".to_string()});
     destinations.push(Dest {name: "about_platform_background".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "background.2ddf02001a27dbe477f1".to_string(), target: "js/".to_string()});
     destinations.push(Dest {name: "background".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "botkyrka_workshop".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "coda-easy-about-us-bg.caa5ae56c9bc0d36d4fc".to_string(), target: "js/".to_string()});
     destinations.push(Dest {name: "coda-easy-about-us-bg".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "coda-easy-graph".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "codaeasy-computer".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "codaeasy-logo".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "code_tree_icon".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "cookie-icon".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "education-bg.77ecf82aa15c2147b2e2".to_string(), target: "js/".to_string()});
     destinations.push(Dest {name: "education-bg".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "first-time-showcase".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "grading_icon".to_string(), target: "".to_string()});
@@ -122,8 +126,16 @@ fn populate(destinations: &mut Vec<Dest>) {
     destinations.push(Dest {name: "own_material_icon".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "right_box".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "strings".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "study.8539caeca31e5087fbd3".to_string(), target: "js/".to_string()});
     destinations.push(Dest {name: "study".to_string(), target: "".to_string()});
     destinations.push(Dest {name: "vc-logo".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "camp_bg.a74f16de71b5ea6411a8".to_string(), target: "js/".to_string()});
+    destinations.push(Dest {name: "camp_bg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "aleksandar.jpeg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "carl-johan.jpeg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "johan.jpeg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "mathilda.jpeg".to_string(), target: "".to_string()});
+    destinations.push(Dest {name: "oskar.jpeg".to_string(), target: "".to_string()});
 
     // Compiler-output
     destinations.push(Dest {name: "index_out_of_bounds".to_string(), target: "".to_string()});
